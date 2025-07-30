@@ -1,0 +1,1374 @@
+<!DOCTYPE html><html lang="pt-BR"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Viva Sorte - Você Ganhou!</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #1F3AB3;
+            --primary-light: #4A90E2;
+            --primary-dark: #1a2f7a;
+            --gold: #FFD700;
+            --gold-dark: #FFA500;
+            --success: #10B981;
+            --white: #FFFFFF;
+            --gray-50: #F9FAFB;
+            --gray-100: #F3F4F6;
+            --gray-200: #E5E7EB;
+            --gray-600: #4B5563;
+            --gray-800: #1F2937;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            --shadow-primary: 0 10px 30px rgba(31, 58, 179, 0.3);
+            --shadow-primary-lg: 0 20px 40px rgba(31, 58, 179, 0.4);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 30%, #6366F1 70%, var(--primary) 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            min-height: 100vh;
+            color: var(--gray-800);
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        /* Partículas de fundo */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 50%;
+            animation: float 8s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* Tela de Carregamento Cinematográfica */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: all 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .loading-screen.fade-out {
+            opacity: 0;
+            transform: scale(1.1);
+            filter: blur(10px);
+            pointer-events: none;
+        }
+
+        .loading-logo {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 40px;
+            animation: logoEntrance 2s ease-out, logoPulse 3s infinite 2s;
+            filter: drop-shadow(0 10px 30px rgba(255, 255, 255, 0.3));
+        }
+
+        @keyframes logoEntrance {
+            0% { transform: scale(0) rotate(-180deg); opacity: 0; }
+            60% { transform: scale(1.2) rotate(10deg); opacity: 1; }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        }
+
+        @keyframes logoPulse {
+            0%, 100% { transform: scale(1); filter: drop-shadow(0 10px 30px rgba(255, 255, 255, 0.3)); }
+            50% { transform: scale(1.05); filter: drop-shadow(0 15px 40px rgba(255, 255, 255, 0.5)); }
+        }
+
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(255,255,255,0.2);
+            border-top: 4px solid var(--white);
+            border-radius: 50%;
+            animation: spin 1.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+            margin-bottom: 30px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            color: var(--white);
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 25px;
+            text-align: center;
+            letter-spacing: 0.5px;
+        }
+
+        .loading-progress {
+            width: 300px;
+            height: 6px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 15px;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .loading-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--white), var(--gold), var(--white));
+            border-radius: 3px;
+            width: 0%;
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+        }
+
+        .loading-percentage {
+            color: var(--white);
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        /* Container Principal */
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background: var(--white);
+            border-radius: 20px;
+            padding: 0;
+            box-shadow: var(--shadow-2xl);
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+            position: relative;
+            z-index: 10;
+        }
+
+        .container.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--gold), var(--primary));
+            animation: shimmer 3s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { transform: translateX(-100%); }
+            50% { transform: translateX(100%); }
+        }
+
+        .content-wrapper {
+            padding: 35px;
+        }
+
+        /* Logo */
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+            animation: slideDown 1s ease-out 0.5s both;
+        }
+
+        @keyframes slideDown {
+            0% { opacity: 0; transform: translateY(-30px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        .logo img {
+            height: 35px;
+            filter: drop-shadow(0 4px 12px rgba(31, 58, 179, 0.2));
+            transition: transform 0.3s ease;
+        }
+
+        .logo img:hover {
+            transform: scale(1.05);
+        }
+
+        /* Banner */
+        .banner {
+            text-align: center;
+            margin-bottom: 30px;
+            animation: slideUp 1s ease-out 0.7s both;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .banner:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        @keyframes slideUp {
+            0% { opacity: 0; transform: translateY(30px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        .banner img {
+            max-width: 100%;
+            border-radius: 16px;
+            transition: transform 0.3s ease;
+        }
+
+        .banner:hover img {
+            transform: scale(1.02);
+        }
+
+        /* Títulos */
+        .prize-title {
+            font-size: clamp(22px, 5vw, 28px);
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-align: center;
+            margin-bottom: 15px;
+            line-height: 1.2;
+            animation: titleReveal 1.2s ease-out 0.9s both;
+            letter-spacing: -0.5px;
+        }
+
+        @keyframes titleReveal {
+            0% { opacity: 0; transform: translateY(20px) scale(0.95); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .prize-subtitle {
+            font-size: 16px;
+            color: var(--gray-600);
+            text-align: center;
+            margin-bottom: 30px;
+            animation: subtitleFade 1s ease-out 1.1s both;
+            font-weight: 500;
+            line-height: 1.5;
+        }
+
+        @keyframes subtitleFade {
+            0% { opacity: 0; transform: translateY(15px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Seção da Cartela */
+        .ticket-section {
+            background: linear-gradient(135deg, var(--gray-50), var(--white));
+            border: 2px solid var(--gray-200);
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 30px;
+            text-align: center;
+            animation: sectionReveal 1s ease-out 1.3s both;
+            box-shadow: var(--shadow-md);
+        }
+
+        @keyframes sectionReveal {
+            0% { opacity: 0; transform: translateY(30px) scale(0.95); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .ticket-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 12px;
+            animation: ticketTitleSlide 0.8s ease-out 1.5s both;
+        }
+
+        @keyframes ticketTitleSlide {
+            0% { opacity: 0; transform: translateX(-20px); }
+            100% { opacity: 1; transform: translateX(0); }
+        }
+
+        /* Grid da Cartela */
+        .ticket-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            max-width: 280px;
+            margin: 25px auto;
+        }
+
+        .ticket-number {
+            padding: 15px 10px;
+            background: var(--gray-100);
+            border-radius: 10px;
+            font-weight: 600;
+            color: var(--gray-600);
+            text-decoration: line-through;
+            opacity: 0;
+            transform: scale(0.8);
+            animation: numberReveal 0.6s ease-out both;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            border: 2px solid transparent;
+        }
+
+        .ticket-number:nth-child(1) { animation-delay: 1.7s; }
+        .ticket-number:nth-child(2) { animation-delay: 1.8s; }
+        .ticket-number:nth-child(3) { animation-delay: 1.9s; }
+        .ticket-number:nth-child(4) { animation-delay: 2.0s; }
+        .ticket-number:nth-child(5) { animation-delay: 2.1s; }
+        .ticket-number:nth-child(6) { animation-delay: 2.2s; }
+        .ticket-number:nth-child(7) { animation-delay: 2.3s; }
+        .ticket-number:nth-child(8) { animation-delay: 2.4s; }
+        .ticket-number:nth-child(9) { animation-delay: 2.5s; }
+
+        @keyframes numberReveal {
+            0% { opacity: 0; transform: scale(0.8) rotateY(-90deg); }
+            100% { opacity: 0.6; transform: scale(1) rotateY(0deg); }
+        }
+
+        .ticket-number.winner {
+            background: #FFD700;
+            color: var(--primary);
+            font-weight: 900;
+            text-decoration: none;
+            opacity: 1;
+            transform: scale(1);
+            animation: winnerReveal 1.2s ease-out 2.6s both;
+            border: 2px solid #FFD700;
+        }
+
+        @keyframes winnerReveal {
+            0% { opacity: 0.6; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1.1); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        /* Informações do Vencedor */
+        .winner-info {
+            margin: 25px 0;
+            animation: winnerInfoSlide 1s ease-out 3.2s both;
+        }
+
+        @keyframes winnerInfoSlide {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        .winner-number {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 12px;
+        }
+
+        .winner-badge {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: var(--white);
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: 700;
+            display: inline-block;
+            margin-bottom: 15px;
+            box-shadow: var(--shadow-primary);
+            animation: badgeFloat 3s ease-in-out infinite;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            font-size: 12px;
+        }
+
+        @keyframes badgeFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-3px); }
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-3px); }
+        }
+
+        /* Botão Principal */
+        .claim-button {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: var(--white);
+            border: none;
+            padding: 18px 35px;
+            font-size: 18px;
+            font-weight: 700;
+            border-radius: 14px;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--shadow-primary);
+            animation: buttonReveal 1s ease-out 3.5s both;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .claim-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .claim-button:hover::before {
+            left: 100%;
+        }
+
+        .claim-button:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-primary-lg);
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+        }
+
+        .claim-button:active {
+            transform: translateY(1px) scale(0.98);
+            box-shadow: var(--shadow-primary);
+        }
+
+        @keyframes buttonReveal {
+            0% { opacity: 0; transform: translateY(30px) scale(0.9); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .claim-description {
+            font-size: 14px;
+            color: var(--gray-600);
+            text-align: center;
+            animation: descriptionFade 1s ease-out 3.7s both;
+            line-height: 1.5;
+        }
+
+        @keyframes descriptionFade {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        /* Popups */
+        .popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            -webkit-backdrop-filter: blur(10px);
+                    backdrop-filter: blur(10px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            animation: popupBackdrop 0.5s ease-out;
+        }
+
+        @keyframes popupBackdrop {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        .popup-content {
+            background: var(--white);
+            padding: 50px 40px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 90%;
+            animation: popupBounce 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            box-shadow: var(--shadow-2xl);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .popup-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--gold), var(--primary));
+        }
+
+        @keyframes popupBounce {
+            0% { opacity: 0; transform: scale(0.3) translateY(-50px); }
+            50% { opacity: 1; transform: scale(1.05) translateY(0); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .popup-icon {
+            width: 70px;
+            height: 70px;
+            margin: 0 auto 25px;
+            animation: iconSpin 1s ease-out;
+        }
+
+        @keyframes iconSpin {
+            0% { transform: rotate(-180deg) scale(0); }
+            100% { transform: rotate(0deg) scale(1); }
+        }
+
+        .popup-text {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+            line-height: 1.3;
+        }
+
+        /* Página de Processamento */
+        .processing-page {
+            display: none;
+            text-align: center;
+            padding: 50px 0;
+            animation: processingFade 1s ease-out;
+        }
+
+        @keyframes processingFade {
+            0% { opacity: 0; transform: translateY(30px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 5px solid rgba(31, 58, 179, 0.1);
+            border-top: 5px solid var(--primary);
+            border-radius: 50%;
+            animation: processingSpinner 1.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+            margin: 0 auto 30px;
+        }
+
+        @keyframes processingSpinner {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .processing-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 20px;
+            animation: processingTitle 1s ease-out 0.3s both;
+        }
+
+        @keyframes processingTitle {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        .timeline {
+            background: linear-gradient(135deg, var(--gray-50), var(--white));
+            border: 2px solid var(--primary);
+            border-radius: 16px;
+            padding: 25px;
+            margin: 30px 0;
+            animation: timelineSlide 1s ease-out 0.5s both;
+            box-shadow: var(--shadow-md);
+        }
+
+        @keyframes timelineSlide {
+            0% { opacity: 0; transform: translateX(-30px); }
+            100% { opacity: 1; transform: translateX(0); }
+        }
+
+        .timeline-value {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 12px;
+            animation: valueCounter 2s ease-out 1s both;
+        }
+
+        @keyframes valueCounter {
+            0% { opacity: 0; transform: scale(0.5); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        /* Modal */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.85);
+            -webkit-backdrop-filter: blur(15px);
+                    backdrop-filter: blur(15px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            padding: 20px;
+            animation: modalBackdrop 0.5s ease-out;
+        }
+
+        @keyframes modalBackdrop {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        .modal-content {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 450px;
+            width: 100%;
+            position: relative;
+            animation: modalSlideUp 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--shadow-2xl);
+            overflow: hidden;
+        }
+
+        .modal-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--gold), var(--primary));
+        }
+
+        @keyframes modalSlideUp {
+            0% { opacity: 0; transform: translateY(50px) scale(0.9); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--gray-600);
+            transition: all 0.3s ease;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-close:hover {
+            background: var(--gray-100);
+            color: var(--primary);
+            transform: rotate(90deg);
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 25px;
+            text-align: center;
+            animation: modalTitleSlide 0.8s ease-out 0.3s both;
+        }
+
+        @keyframes modalTitleSlide {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        .priority-button {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: var(--white);
+            border: none;
+            padding: 16px 30px;
+            font-size: 16px;
+            font-weight: 700;
+            border-radius: 12px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--shadow-primary);
+            position: relative;
+            overflow: hidden;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .priority-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .priority-button:hover::before {
+            left: 100%;
+        }
+
+        .priority-button:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-primary-lg);
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+        }
+
+        .priority-button:active {
+            transform: translateY(1px) scale(0.98);
+        }
+
+        /* Notificações */
+        .notifications {
+            position: fixed;
+            top: 25px;
+            right: 25px;
+            z-index: 500;
+            max-width: 320px;
+        }
+
+        .notification {
+            background: var(--white);
+            border: 2px solid var(--primary);
+            border-radius: 14px;
+            padding: 18px;
+            margin-bottom: 12px;
+            animation: notificationSlide 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .notification::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary), var(--gold));
+        }
+
+        @keyframes notificationSlide {
+            0% { transform: translateX(100%) scale(0.8); opacity: 0; }
+            100% { transform: translateX(0) scale(1); opacity: 1; }
+        }
+
+        .notification-name {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 15px;
+            margin-bottom: 4px;
+        }
+
+        .notification-prize {
+            color: var(--gray-600);
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        /* Seção Fallback */
+        .fallback-section {
+            display: none;
+            background: linear-gradient(135deg, var(--gray-50), var(--white));
+            border: 2px solid var(--primary);
+            border-radius: 16px;
+            padding: 25px;
+            text-align: center;
+            margin-top: 25px;
+            animation: fallbackSlide 1s ease-out;
+            box-shadow: var(--shadow-md);
+        }
+
+        @keyframes fallbackSlide {
+            0% { opacity: 0; transform: translateY(30px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Ícones SVG */
+        .icon {
+            width: 24px;
+            height: 24px;
+            fill: var(--primary);
+        }
+
+        .icon-large {
+            width: 70px;
+            height: 70px;
+            fill: var(--primary);
+        }
+
+        .icon-button {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+
+        /* Responsivo Mobile */
+        @media (max-width: 768px) {
+            .container {
+                margin: 15px;
+                border-radius: 16px;
+            }
+            
+            .content-wrapper {
+                padding: 25px 20px;
+            }
+            
+            .prize-title {
+                font-size: 20px;
+                margin-bottom: 12px;
+            }
+            
+            .prize-subtitle {
+                font-size: 14px;
+                margin-bottom: 25px;
+            }
+            
+            .ticket-grid {
+                grid-template-columns: repeat(2, 1fr);
+                max-width: 240px;
+                gap: 10px;
+            }
+            
+            .ticket-number {
+                padding: 12px 8px;
+                font-size: 12px;
+            }
+            
+            .popup-content {
+                padding: 35px 25px;
+                margin: 20px;
+            }
+            
+            .popup-text {
+                font-size: 20px;
+            }
+
+            .loading-progress {
+                width: 250px;
+            }
+
+            .loading-text {
+                font-size: 16px;
+                padding: 0 20px;
+            }
+
+            .claim-button {
+                padding: 16px 25px;
+                font-size: 16px;
+            }
+
+            .notifications {
+                top: 15px;
+                right: 15px;
+                left: 15px;
+                max-width: none;
+            }
+
+            .notification {
+                padding: 15px;
+            }
+
+            .modal-content {
+                padding: 25px 20px;
+                margin: 20px;
+                max-width: 90%;
+            }
+
+            .winner-number {
+                font-size: 20px;
+            }
+
+            .timeline-value {
+                font-size: 24px;
+            }
+
+            .logo img {
+                height: 30px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .content-wrapper {
+                padding: 20px 15px;
+            }
+
+            .ticket-section {
+                padding: 20px 15px;
+            }
+
+            .prize-title {
+                font-size: 18px;
+            }
+
+            .claim-button {
+                font-size: 14px;
+                padding: 14px 20px;
+            }
+
+            .popup-content {
+                padding: 25px 15px;
+            }
+
+            .modal-content {
+                padding: 20px 15px;
+            }
+
+            .logo img {
+                height: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Partículas de fundo -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Tela de Carregamento -->
+    <div id="loadingScreen" class="loading-screen">
+        <svg class="loading-logo" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2L13.09 8.26L20 9L13.09 9.74L12 16L10.91 9.74L4 9L10.91 8.26L12 2Z" fill="white"></path>
+            <path d="M19 15L19.5 17L21.5 17.5L19.5 18L19 20L18.5 18L16.5 17.5L18.5 17L19 15Z" fill="white"></path>
+            <path d="M5 6L5.5 7.5L7 8L5.5 8.5L5 10L4.5 8.5L3 8L4.5 7.5L5 6Z" fill="white"></path>
+        </svg>
+        
+        <div class="loading-spinner"></div>
+        
+        <div class="loading-text">Verificando seu prêmio extraordinário...</div>
+        
+        <div class="loading-progress">
+            <div id="progressBar" class="loading-progress-bar"></div>
+        </div>
+        
+        <div id="progressText" class="loading-percentage">0%</div>
+    </div>
+
+    <!-- Popup de Pagamento -->
+    <div id="paymentPopup" class="popup">
+        <div class="popup-content">
+            <svg class="popup-icon icon-large" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 6L9 17L4 12" stroke="#10B981" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+            <div class="popup-text">Pagamento processado com sucesso!</div>
+        </div>
+    </div>
+
+    <!-- Popup de Vitória -->
+    <div id="winnerPopup" class="popup">
+        <div class="popup-content">
+            <svg class="popup-icon icon-large" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L13.09 8.26L20 9L13.09 9.74L12 16L10.91 9.74L4 9L10.91 8.26L12 2Z" fill="#FFD700"></path>
+                <path d="M19 15L19.5 17L21.5 17.5L19.5 18L19 20L18.5 18L16.5 17.5L18.5 17L19 15Z" fill="#FFD700"></path>
+                <path d="M5 6L5.5 7.5L7 8L5.5 8.5L5 10L4.5 8.5L3 8L4.5 7.5L5 6Z" fill="#FFD700"></path>
+            </svg>
+            <div class="popup-text">Inacreditável... Um dos ganhadores está aqui agora!</div>
+        </div>
+    </div>
+
+    <!-- Página Principal -->
+    <div id="mainPage" class="container">
+        <div class="content-wrapper">
+            <div class="logo">
+                <img src="images/colorful-34a00d09.svg" alt="Viva Sorte">
+            </div>
+
+
+            <h1 class="prize-title">
+                Você acabou de ser premiado com o prêmio principal do Viva Sorte!
+            </h1>
+            
+            <p class="prize-subtitle">
+                Sua vida nunca mais será a mesma. Este é o momento que você sempre sonhou!
+            </p>
+
+            <div class="ticket-section">
+                <h2 class="ticket-title">Cartela Oficial do Sorteio</h2>
+                <p>Confira a cota sorteada que mudou sua vida para sempre</p>
+                
+                <div class="ticket-grid">
+                    <div class="ticket-number">#145892</div>
+                    <div class="ticket-number">#267431</div>
+                    <div class="ticket-number">#389574</div>
+                    <div class="ticket-number">#412865</div>
+                    <div class="ticket-number winner">#193721</div>
+                    <div class="ticket-number">#534297</div>
+                    <div class="ticket-number">#658139</div>
+                    <div class="ticket-number">#771482</div>
+                    <div class="ticket-number">#893625</div>
+                </div>
+                
+                <div class="winner-info">
+                    <div class="winner-number">Cota Sorteada: <span style="color: #FFD700;">#193721</span></div>
+                    <div class="winner-badge">Bilhete Premiado Validado</div>
+                    <p>Parabéns! Sua cota foi oficialmente registrada como ganhadora do prêmio principal.</p>
+                </div>
+                
+                <button id="claimButton" class="claim-button">
+                    <svg class="icon-button" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"></circle>
+                        <path d="M12 6V12L16 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                    </svg>
+                    Resgatar Agora
+                </button>
+                <p class="claim-description">
+                    Clique no botão acima para iniciar o processo oficial de liberação do seu prêmio
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Página de Processamento -->
+    <div id="processingPage" class="container processing-page">
+        <div class="content-wrapper">
+            <div class="spinner"></div>
+            
+            <h1 class="processing-title">
+                Estamos processando a liberação do seu prêmio...
+            </h1>
+            
+            <p>Aguarde enquanto nosso sistema valida e processa oficialmente seu bilhete premiado</p>
+            
+            <div class="timeline">
+                <div class="timeline-value">6 meses e 22 dias</div>
+                <p>Tempo necessário para conclusão de todos os processos legais e burocráticos</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Prioridade -->
+    <div id="priorityModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" id="modalClose">�</button>
+            
+            <h2 class="modal-title">Informações Importantes sobre seu Prêmio</h2>
+            
+            <div style="background: linear-gradient(135deg, #f8faff, #ffffff); padding: 20px; border-radius: 12px; margin-bottom: 20px; border: 2px solid #e5e7eb;">
+                <h3 style="color: var(--primary); margin-bottom: 12px; font-weight: 700;">Por que 6 meses e 22 dias?</h3>
+                <p style="font-size: 14px; color: var(--gray-600); line-height: 1.6;">
+                    Esse tempo é necessário por conta da obra da casa, transferência dos veículos e 
+                    liberação gradual dos valores conforme o regulamento do sorteio.
+                </p>
+            </div>
+            
+            <div style="text-align: center;">
+                <h3 style="color: var(--primary); margin-bottom: 15px; font-weight: 700; font-size: 18px;">
+                    Deseja antecipar sua premiação e receber tudo em apenas 15 dias?
+                </h3>
+                <p style="margin-bottom: 20px; font-size: 14px; line-height: 1.6; color: var(--gray-600);">
+                    Você pode entrar agora na <strong style="color: var(--primary);">Fila de Prioridade</strong> e acelerar 
+                    drasticamente todo o processo de liberação!
+                </p>
+                
+                <button id="priorityButton" class="priority-button">
+                    <svg class="icon-button" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <polygon points="13,2 3,14 12,14 11,22 21,10 12,10" fill="currentColor"></polygon>
+                    </svg>
+                    Entrar na Fila de Prioridade
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Seção de Fallback -->
+    <div id="fallbackSection" class="container fallback-section">
+        <div class="content-wrapper">
+            <p style="margin-bottom: 15px; font-size: 16px; font-weight: 600; color: var(--primary);">
+                Acelere seu processo e receba seu prêmio com prioridade máxima
+            </p>
+            <button id="fallbackButton" class="priority-button">
+                <svg class="icon-button" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <polygon points="13,2 3,14 12,14 11,22 21,10 12,10" fill="currentColor"></polygon>
+                </svg>
+                Entrar na Fila de Prioridade
+            </button>
+        </div>
+    </div>
+
+    <!-- Notificações -->
+    <div id="notifications" class="notifications"></div>
+
+    <script>
+        console.log('🎬 Iniciando experiência cinematográfica...');
+
+        // Dados das notificações
+        const notifications = [
+            { name: 'Aline R.', prize: 'ganhou uma moto Honda Biz' },
+            { name: 'Roberto S.', prize: 'recebeu R$ 12.000 em dinheiro' },
+            { name: 'Camila V.', prize: 'foi sorteada com uma casa de 2 quartos' },
+            { name: 'Fernando L.', prize: 'ganhou uma TV 65" Samsung' },
+            { name: 'Patrícia M.', prize: 'liberou R$ 8.500 na conta' },
+            { name: 'Diego C.', prize: 'ganhou um iPhone 15 Pro Max' }
+        ];
+
+        let notificationInterval;
+        let modalTimeout;
+
+        // Criar partículas de fundo
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 40;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 8 + 's';
+                particle.style.animationDuration = (Math.random() * 4 + 4) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Função para simular progresso de carregamento
+        function simulateLoading() {
+            console.log('⏳ Iniciando carregamento...');
+            const progressBar = document.getElementById('progressBar');
+            const progressText = document.getElementById('progressText');
+            const loadingScreen = document.getElementById('loadingScreen');
+            
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += Math.random() * 15 + 5;
+                
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(interval);
+                    
+                    setTimeout(() => {
+                        console.log('✨ Carregamento concluído - iniciando fadeout');
+                        loadingScreen.classList.add('fade-out');
+                        
+                        setTimeout(() => {
+                            loadingScreen.style.display = 'none';
+                            showMainPage();
+                        }, 1500);
+                    }, 800);
+                }
+                
+                progressBar.style.width = progress + '%';
+                progressText.textContent = Math.floor(progress) + '%';
+            }, 120);
+        }
+
+        // Função para mostrar página principal
+        function showMainPage() {
+            console.log('🎭 Revelando página principal...');
+            const mainPage = document.getElementById('mainPage');
+            if (mainPage) {
+                mainPage.classList.add('show');
+                
+                setTimeout(() => {
+                    console.log('💳 Mostrando popup de pagamento...');
+                    showPopup('paymentPopup', 2000);
+                    
+                    setTimeout(() => {
+                        console.log('🏆 Mostrando popup de vitória...');
+                        showPopup('winnerPopup', 2500);
+                        
+                        setTimeout(() => {
+                            startNotifications();
+                        }, 2500);
+                    }, 2000);
+                }, 500);
+            }
+        }
+
+        // Função para mostrar popup
+        function showPopup(popupId, duration) {
+            console.log(`🎪 Exibindo popup: ${popupId}`);
+            const popup = document.getElementById(popupId);
+            if (popup) {
+                popup.style.display = 'flex';
+                setTimeout(() => {
+                    popup.style.display = 'none';
+                    console.log(`✅ Popup ${popupId} finalizado`);
+                }, duration);
+            }
+        }
+
+        // Função para mostrar notificação
+        function showNotification(data) {
+            const container = document.getElementById('notifications');
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.innerHTML = `
+                <div class="notification-name">${data.name}</div>
+                <div class="notification-prize">${data.prize}</div>
+            `;
+            
+            container.appendChild(notification);
+            
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.style.transform = 'translateX(100%) scale(0.8)';
+                    notification.style.opacity = '0';
+                    setTimeout(() => notification.remove(), 300);
+                }
+            }, 3500);
+        }
+
+        // Função para iniciar notificações
+        function startNotifications() {
+            console.log('📢 Iniciando sistema de notificações...');
+            let index = 0;
+            
+            notificationInterval = setInterval(() => {
+                if (index >= notifications.length) index = 0;
+                showNotification(notifications[index]);
+                index++;
+            }, 4500);
+        }
+
+        // Função para mostrar modal
+        function showModal() {
+            console.log('🎯 Revelando modal de prioridade...');
+            const modal = document.getElementById('priorityModal');
+            if (modal) {
+                modal.style.display = 'flex';
+            }
+        }
+
+        // Função para esconder modal
+        function hideModal() {
+            console.log('❌ Fechando modal...');
+            const modal = document.getElementById('priorityModal');
+            if (modal) {
+                modal.style.display = 'none';
+            }
+            
+            const fallback = document.getElementById('fallbackSection');
+            if (fallback) {
+                fallback.style.display = 'block';
+                setTimeout(() => {
+                    fallback.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 100);
+            }
+        }
+
+        // Função para ir para página de processamento
+        function goToProcessing() {
+            console.log('⚙️ Iniciando processamento...');
+            
+            const mainPage = document.getElementById('mainPage');
+            const processingPage = document.getElementById('processingPage');
+            
+            if (mainPage) {
+                mainPage.style.opacity = '0';
+                mainPage.style.transform = 'translateY(-30px)';
+                setTimeout(() => {
+                    mainPage.style.display = 'none';
+                    if (processingPage) {
+                        processingPage.style.display = 'block';
+                        setTimeout(() => {
+                            processingPage.classList.add('show');
+                        }, 100);
+                    }
+                }, 500);
+            }
+            
+            startNotifications();
+            modalTimeout = setTimeout(showModal, 8000);
+        }
+
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 DOM carregado - iniciando experiência...');
+            
+            createParticles();
+            
+            const claimButton = document.getElementById('claimButton');
+            if (claimButton) {
+                claimButton.addEventListener('click', function(e) {
+                    console.log('🎯 Botão resgatar clicado!');
+                    goToProcessing();
+                });
+            }
+            
+            const priorityButton = document.getElementById('priorityButton');
+            if (priorityButton) {
+                priorityButton.addEventListener('click', function(e) {
+                    console.log('⚡ Botão prioridade clicado!');
+                    window.open('https://checkout.com', '_blank');
+                });
+            }
+            
+            const fallbackButton = document.getElementById('fallbackButton');
+            if (fallbackButton) {
+                fallbackButton.addEventListener('click', function(e) {
+                    console.log('🔄 Botão fallback clicado!');
+                    window.open('https://checkout.com', '_blank');
+                });
+            }
+            
+            const modalClose = document.getElementById('modalClose');
+            if (modalClose) {
+                modalClose.addEventListener('click', hideModal);
+            }
+            
+            const modal = document.getElementById('priorityModal');
+            if (modal) {
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) hideModal();
+                });
+            }
+            
+            simulateLoading();
+            
+            console.log('✨ Experiência cinematográfica iniciada com sucesso!');
+        });
+
+        // Cleanup
+        window.addEventListener('beforeunload', () => {
+            if (notificationInterval) clearInterval(notificationInterval);
+            if (modalTimeout) clearTimeout(modalTimeout);
+        });
+    </script>
+
+</body></html>
