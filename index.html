@@ -144,7 +144,8 @@
         <span>
             <button type="button" class="btn-contador-cotas" onclick="decrementar()">-</button>
         </span>
-        <input type="number" id="numero" class="input-contador-cotas" value="0" min="0" oninput="highlightButton()">
+        <!-- O valor inicial foi alterado de "0" para "20" -->
+        <input type="number" id="numero" class="input-contador-cotas" value="20" min="0" oninput="highlightButton()">
         <span>
             <button type="button" class="btn-contador-cotas" onclick="incrementar()">+</button>
         </span>
@@ -355,5 +356,13 @@
 </script>
   
 <script src="js/latest.js" data-utmify-prevent-subids="" async="" defer=""></script>
+
+<!-- Adicionado este script para pré-selecionar a cota de 20 ao carregar a página -->
+<script>
+  window.onload = function() {
+    selecionarValor(20);
+  };
+</script>
   
+
 </body></html>
