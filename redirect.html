@@ -18,8 +18,16 @@
     // Pega os parâmetros da URL e cria um objeto para manipulá-los
     const params = new URLSearchParams(location.search);
 
-    // Remove o parâmetro "name"
+    // Pega o valor do parâmetro "name" e armazena em uma variável
+    const nameValue = params.get('name');
+
+    // Remove o parâmetro "name" original
     params.delete('name');
+
+    // Se um valor para "name" foi encontrado, cria o novo parâmetro "nome"
+    if (nameValue) {
+      params.set('nome', nameValue);
+    }
 
     // Converte os parâmetros de volta para uma string
     const newParams = params.toString();
