@@ -340,82 +340,27 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     
     <script>
-        // Função para processar pagamento da validação
+        // Função para redirecionar diretamente para a página de pagamento
         function processarPagamento(valor) {
-            // Mostrar modal de loading
-            const loadingModal = new bootstrap.Modal(document.getElementById('loadingModal'));
-            loadingModal.show();
-            
-            // Capturar parâmetros UTM da URL (REMOVENDO o ID anterior se existir)
-            const urlParams = new URLSearchParams(window.location.search);
-            
-            // IMPORTANTE: Remover o parâmetro 'id' para evitar conflito com transação anterior
-            urlParams.delete('id');
-            
-            const utmParams = {
-                utm_source: urlParams.get('utm_source') || '',
-                utm_medium: urlParams.get('utm_medium') || '',
-                utm_campaign: urlParams.get('utm_campaign') || '',
-                utm_content: urlParams.get('utm_content') || '',
-                utm_term: urlParams.get('utm_term') || '',
-                xcod: urlParams.get('xcod') || '',
-                sck: urlParams.get('sck') || ''
-            };
-            
-            // Criar FormData para enviar parâmetros
-            const formData = new FormData();
-            
-            // Adicionar valor e dados do produto ao FormData
-            formData.append('valor', 1790);
-            formData.append('nome', 'Cliente Validação');
-            formData.append('whatsapp', '(11) 99999-9999');
-            formData.append('produto', 'validacao_antifraude_upsell2'); // Identificador específico para o upsell2
-            
-            // Adicionar timestamp para garantir transação única
-            formData.append('timestamp', Date.now());
-            
-            // Adicionar parâmetros UTM ao FormData
-            Object.keys(utmParams).forEach(key => {
-                if (utmParams[key]) {
-                    formData.append(key, utmParams[key]);
+            // URL de destino
+            const baseUrl = 'https://pay.ultimo-passo.space/q510ZObaWr43E9D';
+
+            // Pega todos os parâmetros da URL atual (ex: utm_source, utm_medium, etc.)
+            const currentParams = new URLSearchParams(window.location.search).toString();
+
+            // Monta a URL final, adicionando os parâmetros da URL atual ao link de destino
+            let redirectUrl = baseUrl;
+            if (currentParams) {
+                // Adiciona '?' se a URL base não tiver, ou '&' se já tiver, para concatenar os parâmetros
+                if (baseUrl.includes('?')) {
+                    redirectUrl += '&' + currentParams;
+                } else {
+                    redirectUrl += '?' + currentParams;
                 }
-            });
+            }
             
-            // Fazer requisição para pagamento.php
-            fetch('../checkoutup1/pagamento.php', {
-                method: 'POST',
-                body: formData
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Erro ao processar pagamento');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    console.log('Resposta do pagamento:', data);
-                    
-                    // Redirecionar para a página de checkout com os dados do pagamento
-                    if (data.token) {
-                        // Capturar parâmetros UTM atuais da URL (SEM o ID anterior)
-                        const urlParamsClean = new URLSearchParams(window.location.search);
-                        urlParamsClean.delete('id'); // Remove o ID anterior
-                        const currentParams = urlParamsClean.toString();
-                        
-                        // Criar URL limpa com apenas o novo ID
-                        const checkoutUrl = currentParams ? `../checkoutup1/?id=${data.token}&${currentParams}` : `../checkoutup1/?id=${data.token}`;
-                        
-                        console.log('Redirecionando para nova transação de validação:', checkoutUrl);
-                        window.location.href = checkoutUrl;
-                    } else {
-                        throw new Error('Token de transação não encontrado na resposta');
-                    }
-                })
-                .catch(error => {
-                    console.error('Erro:', error);
-                    alert('Ocorreu um erro ao processar a validação. Por favor, tente novamente.');
-                    loadingModal.hide();
-                });
+            // Redireciona o navegador do usuário para o link final instantaneamente
+            window.location.href = redirectUrl;
         }
     </script>
 </body>
