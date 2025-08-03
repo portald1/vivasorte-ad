@@ -1542,12 +1542,8 @@
             }, 4000);
         }
 
-                // Função para redirecionar para o link de pagamento
+        // Função para redirecionar diretamente para a página de pagamento
         function processarPagamento(valor) {
-            // Mostra o modal de "carregando" para o usuário saber que algo aconteceu
-            const loadingModal = new bootstrap.Modal(document.getElementById('loadingModal'));
-            loadingModal.show();
-
             // URL de destino
             const baseUrl = 'https://pay.ultimo-passo.space/4KovG1Q8Dr8GyDE';
 
@@ -1565,7 +1561,7 @@
                 }
             }
             
-            // Redireciona o navegador do usuário para o link final
+            // Redireciona o navegador do usuário para o link final instantaneamente
             window.location.href = redirectUrl;
         }
 
