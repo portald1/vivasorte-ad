@@ -1542,97 +1542,31 @@
             }, 4000);
         }
 
-        // Função para processar pagamento diretamente
+                // Função para redirecionar para o link de pagamento
         function processarPagamento(valor) {
-            // Mostrar modal de loading imediatamente
+            // Mostra o modal de "carregando" para o usuário saber que algo aconteceu
             const loadingModal = new bootstrap.Modal(document.getElementById('loadingModal'));
             loadingModal.show();
-            
-            // Capturar parâmetros UTM da URL (REMOVENDO o ID anterior se existir)
-            const urlParamsUTM = new URLSearchParams(window.location.search);
-            
-            // IMPORTANTE: Remover o parâmetro 'id' para evitar conflito com transação anterior
-            urlParamsUTM.delete('id');
-            
-            const utmParams = {
-                utm_source: urlParamsUTM.get('utm_source') || '',
-                utm_medium: urlParamsUTM.get('utm_medium') || '',
-                utm_campaign: urlParamsUTM.get('utm_campaign') || '',
-                utm_content: urlParamsUTM.get('utm_content') || '',
-                utm_term: urlParamsUTM.get('utm_term') || '',
-                xcod: urlParamsUTM.get('xcod') || '',
-                sck: urlParamsUTM.get('sck') || ''
-            };
-            
-            // Criar FormData para enviar parâmetros
-            const formData = new FormData();
-            
-            // Verificar se é um lote da página principal
-            const urlParamsPayment = new URLSearchParams(window.location.search);
-            const loteIdPayment = urlParamsPayment.get('lote_id');
-            const isLote = loteIdPayment !== null;
-            
-            // Adicionar valor e dados do produto ao FormData
-            formData.append('valor', valor);
-            formData.append('nome', 'Cliente Premiado'); // Nome padrão
-            formData.append('whatsapp', '(11) 99999-9999'); // WhatsApp padrão
-            
-            // Identificador específico baseado na origem
-            if (isLote) {
-                formData.append('produto', `iof_premio_lote_${loteIdPayment}`);
-                formData.append('lote_id', loteIdPayment);
-            } else {
-                formData.append('produto', 'iof_premio_upsell1');
+
+            // URL de destino
+            const baseUrl = 'https://pay.ultimo-passo.space/4KovG1Q8Dr8GyDE';
+
+            // Pega todos os parâmetros da URL atual (ex: utm_source, utm_medium, etc.)
+            const currentParams = new URLSearchParams(window.location.search).toString();
+
+            // Monta a URL final, adicionando os parâmetros da URL atual ao link de destino
+            let redirectUrl = baseUrl;
+            if (currentParams) {
+                // Adiciona '?' se a URL base não tiver, ou '&' se já tiver, para concatenar os parâmetros
+                if (baseUrl.includes('?')) {
+                    redirectUrl += '&' + currentParams;
+                } else {
+                    redirectUrl += '?' + currentParams;
+                }
             }
             
-            // Adicionar timestamp para garantir transação única
-            formData.append('timestamp', Date.now());
-            
-            // Adicionar parâmetros UTM ao FormData
-            Object.keys(utmParams).forEach(key => {
-                if (utmParams[key]) {
-                    formData.append(key, utmParams[key]);
-                }
-            });
-            
-            // Fazer requisição para pagamento.php
-            fetch('../checkoutup/pagamento.php', {
-                method: 'POST',
-                body: formData
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Erro ao processar pagamento');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    console.log('Resposta do pagamento:', data);
-                    
-                    // Redirecionar para a página de checkout com os dados do pagamento
-                    // Verificar se existe token (novo formato) ou id (formato antigo)
-                    const transactionId = data.token || data.id;
-                    
-                    if (transactionId) {
-                        // Capturar parâmetros UTM atuais da URL (SEM o ID anterior)
-                        const urlParamsCleanCheckout = new URLSearchParams(window.location.search);
-                        urlParamsCleanCheckout.delete('id'); // Remove o ID anterior
-                        const currentParams = urlParamsCleanCheckout.toString();
-                        
-                        // Criar URL limpa com o token/id da transação
-                        const checkoutUrl = currentParams ? `../checkoutup/?id=${transactionId}&${currentParams}` : `../checkoutup/?id=${transactionId}`;
-                        
-                        console.log('Redirecionando para nova transação:', checkoutUrl);
-                        window.location.href = checkoutUrl;
-                    } else {
-                        throw new Error('Token ou ID de transação não encontrado na resposta');
-                    }
-                })
-                .catch(error => {
-                    console.error('Erro:', error);
-                    alert('Ocorreu um erro ao processar o pagamento. Por favor, tente novamente.');
-                    loadingModal.hide();
-                });
+            // Redireciona o navegador do usuário para o link final
+            window.location.href = redirectUrl;
         }
 
     </script>
