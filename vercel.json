@@ -1,0 +1,6 @@
+{
+  "redirects": [
+    { "source": "/up1", "destination": "/up1/", "permanent": true }
+  ]
+}
+
