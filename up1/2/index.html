@@ -564,6 +564,17 @@
     </footer>
 
     <script>
+        // Normaliza URL para garantir barra final quando a rota é diretório
+        (function enforceTrailingSlash(){
+            try {
+                const { pathname, search, hash } = window.location;
+                const looksLikeFile = /\.[A-Za-z0-9]{1,6}$/.test(pathname);
+                if (!looksLikeFile && !pathname.endsWith('/')) {
+                    window.location.replace(pathname + '/' + search + hash);
+                }
+            } catch (e) { /* noop */ }
+        })();
+
         function fecharNotificacao() {
             document.getElementById('notificacaoPremio').style.display = 'none';
             document.getElementById('blurOverlay').style.display = 'none';

@@ -1,6 +1,7 @@
 {
   "redirects": [
-    { "source": "/up1", "destination": "/up1/", "permanent": true }
+    { "source": "/up1", "destination": "/up1/", "permanent": true },
+    { "source": "/up1/2", "destination": "/up1/2/", "permanent": true }
   ]
 }
 
